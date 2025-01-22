@@ -32,7 +32,7 @@ class HomeViewModel(
         viewModelScope.launch {
             getUserUseCase(id).catch { error ->
                 _state.update { it.copy(isLoading = false) }
-                snackbarManager.showSnackbar(error.localizedMessage ?: "Unknown error")
+                snackbarManager.showSnackbar(error)
             }.collect { result ->
                 when (result) {
                     DomainResult.Loading -> _state.update {
@@ -45,9 +45,7 @@ class HomeViewModel(
 
                     is DomainResult.Failure -> {
                         _state.update { it.copy(isLoading = false) }
-                        snackbarManager.showSnackbar(
-                            result.exception.localizedMessage ?: "Unknown error"
-                        )
+                        snackbarManager.showSnackbar(result.exception)
                     }
                 }
             }

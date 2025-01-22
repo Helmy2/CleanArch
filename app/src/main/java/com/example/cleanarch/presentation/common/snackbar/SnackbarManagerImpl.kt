@@ -5,9 +5,11 @@ import com.example.cleanarch.di.SnackbarHostStateProvider
 class SnackbarManagerImpl(
     val snackbarHostStateProvider: SnackbarHostStateProvider
 ) : SnackbarManager {
-    override suspend fun showSnackbar(message: String) {
+    override suspend fun showSnackbar(throwable: Throwable) {
         dismissSnackbar()
-        snackbarHostStateProvider.snackbarHostState?.showSnackbar(message)
+        snackbarHostStateProvider.snackbarHostState?.showSnackbar(
+            throwable.localizedMessage ?: "Unknown error"
+        )
     }
 
     override suspend fun dismissSnackbar() {
