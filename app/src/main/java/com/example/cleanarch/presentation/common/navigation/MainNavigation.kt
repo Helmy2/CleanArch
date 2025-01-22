@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.main
+package com.example.cleanarch.presentation.common.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +9,6 @@ import androidx.navigation.toRoute
 import com.example.cleanarch.presentation.details.DetailsRoute
 import com.example.cleanarch.presentation.home.HomeRoute
 import com.example.cleanarch.presentation.profile.ProfileRoute
-import kotlinx.serialization.Serializable
 
 @Composable
 fun MainNavigation(
@@ -23,7 +22,7 @@ fun MainNavigation(
         modifier = modifier,
     ) {
         composable<AppDestination.Home> {
-            HomeRoute(onNavigateToDetails = { navController.navigate(AppDestination.Details(it)) })
+            HomeRoute()
         }
 
         composable<AppDestination.Details> {
@@ -37,13 +36,3 @@ fun MainNavigation(
     }
 }
 
-sealed class AppDestination {
-    @Serializable
-    data object Home : AppDestination()
-
-    @Serializable
-    data object Profile : AppDestination()
-
-    @Serializable
-    data class Details(val id: Int) : AppDestination()
-}

@@ -1,0 +1,28 @@
+package com.example.cleanarch.presentation.common.navigation
+
+import com.example.cleanarch.di.NavControllerProvider
+import kotlinx.serialization.Serializable
+
+
+sealed class AppDestination {
+    @Serializable
+    data object Home : AppDestination()
+
+    @Serializable
+    data object Profile : AppDestination()
+
+    @Serializable
+    data class Details(val id: Int) : AppDestination()
+}
+
+class NavigatorImpl(
+    val navControllerProvider: NavControllerProvider
+) : Navigator {
+    override fun navigateToDetails(id: Int) {
+        navControllerProvider.navController?.navigate(AppDestination.Details(id = id))
+    }
+
+    override fun navigateBack() {
+        navControllerProvider.navController?.popBackStack()
+    }
+}

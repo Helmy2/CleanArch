@@ -3,7 +3,6 @@ package com.example.cleanarch.presentation.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -12,16 +11,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,42 +24,17 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeRoute(
     viewModel: HomeViewModel = koinViewModel(),
-    onNavigateToDetails: (id: Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(state.effect) {
-        state.effect?.let { effect ->
-            when (effect) {
-                is HomeEffect.ShowSnackbar -> {
-                    val result = snackbarHostState.showSnackbar(effect.message)
-                    if (result == SnackbarResult.Dismissed) {
-                        viewModel.handleEvent(HomeEvent.DismissError)
-                    }
-                }
+    when {
+        state.isLoading -> FullScreenLoader()
+        state.user != null -> UserContent(
+            user = state.user!!,
+            onDetailsClick = { viewModel.handleEvent(HomeEvent.NavigateToDetails) },
+        )
 
-                is HomeEffect.NavigateToDetails -> {
-                    onNavigateToDetails(effect.id)
-                    viewModel.handleEvent(HomeEvent.NavigationHandled)
-                }
-            }
-        }
-    }
-
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) { paddingValues ->
-        when {
-            state.isLoading -> FullScreenLoader()
-            state.user != null -> UserContent(
-                user = state.user!!,
-                onDetailsClick = { viewModel.handleEvent(HomeEvent.NavigateToDetails) },
-                paddingValues = paddingValues
-            )
-
-            else -> ErrorState(onRetry = { viewModel.handleEvent(HomeEvent.LoadUser(1)) })
-        }
+        else -> ErrorState(onRetry = { viewModel.handleEvent(HomeEvent.LoadUser(1)) })
     }
 }
 
@@ -74,11 +42,9 @@ fun HomeRoute(
 private fun UserContent(
     user: User,
     onDetailsClick: () -> Unit,
-    paddingValues: PaddingValues
 ) {
     Column(
         modifier = Modifier
-            .padding(paddingValues)
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,

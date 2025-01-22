@@ -6,7 +6,8 @@ import com.example.cleanarch.domain.exceptions.UserNotFoundException
 import com.example.cleanarch.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 /**
  * A use case class responsible for retrieving a user by their ID.
@@ -18,14 +19,13 @@ import kotlinx.coroutines.flow.transform
  */
 class GetUserUseCase(private val userRepository: UserRepository) {
     operator fun invoke(userId: Int): Flow<DomainResult<User>> {
-        return userRepository.getUser(userId).transform { userData ->
-            emit(DomainResult.Loading)
+        return userRepository.getUser(userId).map { userData ->
             if (userData != null) {
-                emit(DomainResult.Success(userData))
+                DomainResult.Success(userData)
             } else {
-                emit(DomainResult.Failure(UserNotFoundException(userId)))
+                DomainResult.Failure(UserNotFoundException(userId))
             }
-        }.catch { e ->
+        }.onStart { emit(DomainResult.Loading) }.catch { e ->
             emit(DomainResult.Failure(e))
         }
     }
