@@ -1,9 +1,12 @@
 package com.example.cleanarch.domain.exceptions
 
+import com.example.cleanarch.domain.exceptions.AuthException.AccountConversionFailedException
+import com.example.cleanarch.domain.exceptions.AuthException.AnonymousSignInFailedException
 import com.example.cleanarch.domain.exceptions.AuthException.EmailAlreadyInUseException
 import com.example.cleanarch.domain.exceptions.AuthException.GenericAuthException
 import com.example.cleanarch.domain.exceptions.AuthException.InvalidCredentialsException
 import com.example.cleanarch.domain.exceptions.AuthException.NoInternetConnectionException
+import com.example.cleanarch.domain.exceptions.AuthException.UserNotFoundException
 import com.example.cleanarch.domain.exceptions.AuthException.WeakPasswordException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -27,6 +30,9 @@ class AuthExceptionMapper : ExceptionMapper {
         is FirebaseAuthWeakPasswordException -> WeakPasswordException()
         is FirebaseAuthInvalidCredentialsException -> InvalidCredentialsException()
         is FirebaseNetworkException -> NoInternetConnectionException()
+        is AnonymousSignInFailedException -> AnonymousSignInFailedException()
+        is UserNotFoundException -> UserNotFoundException()
+        is AccountConversionFailedException -> AccountConversionFailedException()
         else -> GenericAuthException()
     }
 }
