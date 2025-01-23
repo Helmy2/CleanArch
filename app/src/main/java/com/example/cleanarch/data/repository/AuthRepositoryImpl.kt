@@ -2,7 +2,7 @@ package com.example.cleanarch.data.repository
 
 import com.example.cleanarch.data.local.LocalAuthManager
 import com.example.cleanarch.data.remote.RemoteAuthManager
-import com.example.cleanarch.domain.entity.DomainResult
+import com.example.cleanarch.domain.entity.Resource
 import com.example.cleanarch.domain.entity.User
 import com.example.cleanarch.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,13 +20,13 @@ class AuthRepositoryImpl(
     private val dispatcher: CoroutineDispatcher,
 ) : AuthRepository {
 
-    override fun getCurrentUser(): Flow<DomainResult<User?>> {
-        return flow<DomainResult<User?>> {
+    override fun getCurrentUser(): Flow<Resource<User?>> {
+        return flow<Resource<User?>> {
             // Emit the latest local user
             var localUser: User? = null
             localManager.getCurrentUser().collect { user ->
                 localUser = user
-                emit(DomainResult.Success(user))
+                emit(Resource.Success(user))
             }
 
             // Emit remote user changes and update local storage if necessary
@@ -41,9 +41,9 @@ class AuthRepositoryImpl(
 //                    emit(DomainResult.Success(null))
                 }
             }
-        }.onStart { emit(DomainResult.Loading) }
+        }.onStart { emit(Resource.Loading) }
             .catch {
-                emit(DomainResult.Failure(it))
+                emit(Resource.Failure(it))
             }.flowOn(dispatcher)
     }
 
@@ -54,19 +54,19 @@ class AuthRepositoryImpl(
         try {
             val user = remoteManager.signInWithEmailAndPassword(email, password)
             localManager.saveUser(user)
-            DomainResult.Success(Unit)
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            DomainResult.Failure(e)
+            Resource.Failure(e)
         }
     }
 
-    override suspend fun signInAnonymously(): DomainResult<Unit> = withContext(dispatcher) {
+    override suspend fun signInAnonymously(): Resource<Unit> = withContext(dispatcher) {
         try {
             val user = remoteManager.signInAnonymously()
             localManager.saveUser(user)
-            DomainResult.Success(Unit)
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            DomainResult.Failure(e)
+            Resource.Failure(e)
         }
     }
 
@@ -74,33 +74,33 @@ class AuthRepositoryImpl(
         email: String,
         password: String,
         name: String
-    ): DomainResult<Unit> = withContext(dispatcher) {
+    ): Resource<Unit> = withContext(dispatcher) {
         try {
             val user = remoteManager.linkToPermanentAccount(email, password, name)
             localManager.saveUser(user)
-            DomainResult.Success(Unit)
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            DomainResult.Failure(e)
+            Resource.Failure(e)
         }
     }
 
-    override suspend fun deleteUser(): DomainResult<Unit> {
+    override suspend fun deleteUser(): Resource<Unit> {
         return try {
             remoteManager.deleteUser()
             localManager.clearUser()
-            DomainResult.Success(Unit)
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            DomainResult.Failure(e)
+            Resource.Failure(e)
         }
     }
 
-    override suspend fun signOut(): DomainResult<Unit> = withContext(dispatcher) {
+    override suspend fun signOut(): Resource<Unit> = withContext(dispatcher) {
         try {
             remoteManager.signOut()
             localManager.clearUser()
-            DomainResult.Success(Unit)
+            Resource.Success(Unit)
         } catch (e: Exception) {
-            DomainResult.Failure(e)
+            Resource.Failure(e)
         }
     }
 }

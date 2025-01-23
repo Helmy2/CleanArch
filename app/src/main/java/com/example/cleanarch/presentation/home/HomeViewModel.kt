@@ -2,7 +2,7 @@ package com.example.cleanarch.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cleanarch.domain.entity.DomainResult
+import com.example.cleanarch.domain.entity.Resource
 import com.example.cleanarch.domain.usecas.GetUserUseCase
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
@@ -35,15 +35,15 @@ class HomeViewModel(
                 snackbarManager.showSnackbar(error)
             }.collect { result ->
                 when (result) {
-                    DomainResult.Loading -> _state.update {
+                    Resource.Loading -> _state.update {
                         it.copy(isLoading = true)
                     }
 
-                    is DomainResult.Success -> _state.update {
+                    is Resource.Success -> _state.update {
                         it.copy(isLoading = false, user = result.data)
                     }
 
-                    is DomainResult.Failure -> {
+                    is Resource.Failure -> {
                         _state.update { it.copy(isLoading = false) }
                         snackbarManager.showSnackbar(result.exception)
                     }
