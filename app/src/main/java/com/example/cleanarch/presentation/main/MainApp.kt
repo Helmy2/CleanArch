@@ -25,7 +25,6 @@ import com.example.cleanarch.di.SnackbarHostStateProvider
 import com.example.cleanarch.presentation.common.navigation.AppDestination
 import com.example.cleanarch.presentation.common.navigation.MainNavigation
 import com.example.cleanarch.presentation.theme.CleanArchTheme
-import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.compose.getKoin
 
 
@@ -51,51 +50,50 @@ fun MainApp() {
         it.snackbarHostState = snackbarHostState
     }
 
-    KoinAndroidContext {
-        CleanArchTheme {
-            Scaffold(
-                snackbarHost = { SnackbarHost(snackbarHostState) },
-                bottomBar = {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    AnimatedVisibility(
-                        visible = topLevelRoutes.any { it.route.hashCode() == currentDestination?.id },
-                    ) {
-                        NavigationBar {
-                            topLevelRoutes.forEach { topLevelRoute ->
-                                NavigationBarItem(
-                                    icon = {
-                                        Icon(
-                                            topLevelRoute.icon,
-                                            contentDescription = topLevelRoute.name
-                                        )
-                                    },
-                                    label = { Text(topLevelRoute.name) },
-                                    selected = currentDestination?.id == topLevelRoute.route.hashCode(),
-                                    onClick = {
-                                        navController.navigate(topLevelRoute.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
+    CleanArchTheme {
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            bottomBar = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                AnimatedVisibility(
+                    visible = topLevelRoutes.any { it.route.hashCode() == currentDestination?.id },
+                ) {
+                    NavigationBar {
+                        topLevelRoutes.forEach { topLevelRoute ->
+                            NavigationBarItem(
+                                icon = {
+                                    Icon(
+                                        topLevelRoute.icon,
+                                        contentDescription = topLevelRoute.name
+                                    )
+                                },
+                                label = { Text(topLevelRoute.name) },
+                                selected = currentDestination?.id == topLevelRoute.route.hashCode(),
+                                onClick = {
+                                    navController.navigate(topLevelRoute.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
                                         }
-                                    },
-                                )
-                            }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                            )
                         }
                     }
-                },
-            ) { innerPadding ->
-                MainNavigation(
-                    navController = navController,
-                    startDestination = AppDestination.Home,
-                    modifier = Modifier
-                        .padding(innerPadding)
-                )
-            }
+                }
+            },
+        ) { innerPadding ->
+            MainNavigation(
+                navController = navController,
+                startDestination = AppDestination.Home,
+                modifier = Modifier
+                    .padding(innerPadding)
+            )
         }
     }
 }
+
 
 

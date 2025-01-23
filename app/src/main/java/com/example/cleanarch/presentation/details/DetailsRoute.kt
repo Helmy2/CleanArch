@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DetailsRoute(id: Int) {
+fun DetailsRoute(id: String) {
     Scaffold {
         Column(
             modifier = Modifier

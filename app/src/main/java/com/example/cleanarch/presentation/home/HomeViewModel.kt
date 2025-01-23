@@ -22,15 +22,15 @@ class HomeViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
-    val state: StateFlow<HomeState> = _state.onStart { loadUserData(0) }.stateIn(
+    val state: StateFlow<HomeState> = _state.onStart { loadUserData() }.stateIn(
         viewModelScope,
         //Keep state alive for 5s after UI stops observing
         SharingStarted.WhileSubscribed(5000), HomeState()
     )
 
-    private fun loadUserData(id: Int) {
+    private fun loadUserData() {
         viewModelScope.launch {
-            getUserUseCase(id).catch { error ->
+            getUserUseCase().catch { error ->
                 _state.update { it.copy(isLoading = false) }
                 snackbarManager.showSnackbar(error)
             }.collect { result ->
@@ -55,10 +55,10 @@ class HomeViewModel(
     fun handleEvent(event: HomeEvent) {
         when (event) {
             is HomeEvent.NavigateToDetails -> {
-                navigator.navigateToDetails(_state.value.user?.id ?: -1)
+                navigator.navigateToDetails(_state.value.user?.id ?: "")
             }
 
-            is HomeEvent.LoadUser -> loadUserData(event.id)
+            is HomeEvent.LoadUser -> loadUserData()
         }
     }
 }

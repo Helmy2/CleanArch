@@ -1,6 +1,6 @@
 package com.example.cleanarch.presentation.common.navigation
 
 interface Navigator {
-    fun navigateToDetails(id: Int)
+    fun navigateToDetails(id: String)
     fun navigateBack()
 }

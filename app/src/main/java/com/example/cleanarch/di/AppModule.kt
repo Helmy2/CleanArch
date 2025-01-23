@@ -1,11 +1,5 @@
 package com.example.cleanarch.di
 
-import com.example.cleanarch.data.local.LocalUserManager
-import com.example.cleanarch.data.local.LocalUserManagerImpl
-import com.example.cleanarch.data.remote.RemoteUserManager
-import com.example.cleanarch.data.remote.RemoteUserManagerImpl
-import com.example.cleanarch.data.repository.UserRepositoryImpl
-import com.example.cleanarch.domain.repository.UserRepository
 import com.example.cleanarch.domain.usecas.GetUserUseCase
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.navigation.NavigatorImpl
@@ -15,12 +9,6 @@ import com.example.cleanarch.presentation.home.HomeViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-
-val dataModule = module {
-    single<UserRepository> { UserRepositoryImpl(get(), get()) }
-    single<LocalUserManager> { LocalUserManagerImpl() }
-    single<RemoteUserManager> { RemoteUserManagerImpl() }
-}
 
 val userModule = module {
     factory { GetUserUseCase(get()) }
@@ -38,8 +26,11 @@ val snackbarModule = module {
 }
 
 val appModule = module {
-    includes(userModule)
-    includes(dataModule)
     includes(navigatorModule)
     includes(snackbarModule)
+    includes(exceptionMapperModule)
+    includes(dataStoreModule)
+    includes(firebaseModule)
+    includes(userModule)
+    includes(dataModule)
 }

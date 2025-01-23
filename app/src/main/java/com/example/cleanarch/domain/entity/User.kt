@@ -10,5 +10,8 @@ package com.example.cleanarch.domain.entity
  * @constructor Creates a new User object with the specified properties.
  */
 data class User(
-    val id: Int, val name: String, val email: String
+    val id: String,
+    val name: String,
+    val email: String,
+    val isAnonymous: Boolean
 )

@@ -12,13 +12,13 @@ sealed class AppDestination {
     data object Profile : AppDestination()
 
     @Serializable
-    data class Details(val id: Int) : AppDestination()
+    data class Details(val id: String) : AppDestination()
 }
 
 class NavigatorImpl(
     val navControllerProvider: NavControllerProvider
 ) : Navigator {
-    override fun navigateToDetails(id: Int) {
+    override fun navigateToDetails(id: String) {
         navControllerProvider.navController?.navigate(AppDestination.Details(id = id))
     }
 
