@@ -34,11 +34,11 @@ class AuthRepositoryImpl(
                 if (remoteUser != null && remoteUser != localUser) {
                     // Save the remote user to local storage
                     localManager.saveUser(remoteUser)
-//                    emit(DomainResult.Success(remoteUser))
+                    emit(Resource.Success(remoteUser))
                 } else {
                     // Clear local storage if the user signs out remotely
                     localManager.clearUser()
-//                    emit(DomainResult.Success(null))
+                    emit(Resource.Success(null))
                 }
             }
         }.onStart { emit(Resource.Loading) }
