@@ -2,41 +2,15 @@ package com.example.cleanarch.data.utils
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.every
 import io.mockk.mockk
 
-/**
- * Creates a mocked [Task] that simulates the result of an authentication operation.
- *
- * This function is useful for testing components that depend on Firebase Authentication
- * without needing to interact with the real Firebase service. It allows you to control
- * whether the task succeeds or fails and what data it returns.
- *
- * @param user The [FirebaseUser] that the mocked authentication should return upon success.
- *             If `null` and no exception is provided, it simulates a successful authentication with no user.
- *             If an exception is provided, this parameter is ignored.
- * @param exception An optional [Exception] that the mocked task should throw upon execution.
- *                  If provided, the task will fail with this exception. If null, the task will succeed.
- * @return A mocked [Task] of type [AuthResult] that either succeeds with the provided user or fails with the provided exception.
- *
- * Example usage:
- * You can use [mockFirebaseUser] to create a mock user
- * ```kotlin
- * // Simulate a successful authentication with a user
- * val user = mockFirebaseUser("some_user_id")
- * val mockTaskSuccess = mockAuthTask(user, null)
- *
- * // Simulate a failed authentication with an exception
- * val mockTaskFailure = mockAuthTask(null, Exception("Authentication failed"))
- * ```
- */
-fun mockAuthTask(
-    user: FirebaseUser?, exception: Exception?
-): Task<AuthResult> {
-    return mockTask(
-        result = mockAuthResult(user), exception = exception
-    )
+
+fun mockFirebaseAuthException() = mockk<FirebaseAuthException>(relaxed = true) {
+    every { errorCode } returns "code"
+    every { message } returns "message"
 }
 
 /**
