@@ -91,7 +91,7 @@ class AuthRepositoryImplTest {
         val result = authRepository.signInWithEmailAndPassword("test@example.com", "password")
 
         // Assert
-        result shouldBe Resource.Success(Unit)
+        result.isSuccess shouldBe true
         coVerify(exactly = 1) { mockLocalAuthManager.saveUser(mockUser) }
     }
 
@@ -105,7 +105,48 @@ class AuthRepositoryImplTest {
         val result = authRepository.signInWithEmailAndPassword("invalid", "creds")
 
         // Assert
-        result shouldBe Resource.Failure(exception)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
+        coVerify(exactly = 0) { mockLocalAuthManager.saveUser(any()) }
+    }
+
+    @Test
+    fun `registerWithEmailAndPassword should return success and save user`() = runTest {
+        // Arrange
+        val mockUser = User("123", "Test User", "test@example.com", false)
+        coEvery {
+            mockRemoteAuthManager.registerWithEmailAndPassword(
+                any(),
+                any()
+            )
+        } returns mockUser
+        coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
+
+        // Act
+        val result = authRepository.registerWithEmailAndPassword("test@example.com", "password")
+
+        // Assert
+        result.isSuccess shouldBe true
+        coVerify(exactly = 1) { mockLocalAuthManager.saveUser(mockUser) }
+    }
+
+    @Test
+    fun `registerWithEmailAndPassword should return failure on error`() = runTest {
+        // Arrange
+        val exception = RuntimeException("Registration failed")
+        coEvery {
+            mockRemoteAuthManager.registerWithEmailAndPassword(
+                any(),
+                any()
+            )
+        } throws exception
+
+        // Act
+        val result = authRepository.registerWithEmailAndPassword("invalid", "creds")
+
+        // Assert
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
         coVerify(exactly = 0) { mockLocalAuthManager.saveUser(any()) }
     }
 
@@ -120,7 +161,7 @@ class AuthRepositoryImplTest {
         val result = authRepository.signInAnonymously()
 
         // Assert
-        result shouldBe Resource.Success(Unit)
+        result.isSuccess shouldBe true
         coVerify(exactly = 1) { mockLocalAuthManager.saveUser(mockUser) }
     }
 
@@ -134,7 +175,8 @@ class AuthRepositoryImplTest {
         val result = authRepository.signInAnonymously()
 
         // Assert
-        result shouldBe Resource.Failure(exception)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
         coVerify(exactly = 0) { mockLocalAuthManager.saveUser(any()) }
     }
 
@@ -142,44 +184,62 @@ class AuthRepositoryImplTest {
     fun `convertToPermanentAccount should return success and save user`() = runTest {
         // Arrange
         val mockUser = User("123", "Test User", "test@example.com", false)
-        coEvery {
-            mockRemoteAuthManager.linkToPermanentAccount(
-                any(),
-                any(),
-                any()
-            )
-        } returns mockUser
+        coEvery { mockRemoteAuthManager.linkToPermanentAccount(any(), any()) } returns mockUser
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
 
         // Act
-        val result =
-            authRepository.convertToPermanentAccount("test@example.com", "password", "Test User")
+        val result = authRepository.convertToPermanentAccount("test@example.com", "password")
 
         // Assert
-        result shouldBe Resource.Success(Unit)
+        result.isSuccess shouldBe true
         coVerify(exactly = 1) { mockLocalAuthManager.saveUser(mockUser) }
     }
+
 
     @Test
     fun `convertToPermanentAccount should return failure on error`() = runTest {
         // Arrange
         val exception = RuntimeException("Conversion failed")
-        coEvery {
-            mockRemoteAuthManager.linkToPermanentAccount(
-                any(),
-                any(),
-                any()
-            )
-        } throws exception
+        coEvery { mockRemoteAuthManager.linkToPermanentAccount(any(), any()) } throws exception
 
         // Act
-        val result = authRepository.convertToPermanentAccount("invalid", "creds", "Invalid User")
+        val result = authRepository.convertToPermanentAccount("invalid", "creds")
 
         // Assert
-        result shouldBe Resource.Failure(exception)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
         coVerify(exactly = 0) { mockLocalAuthManager.saveUser(any()) }
     }
 
+    @Test
+    fun `updateDisplayName should return success and save user`() = runTest {
+        // Arrange
+        val mockUser = User("123", "New Name", "test@example.com", false)
+        coEvery { mockRemoteAuthManager.updateDisplayName(any()) } returns mockUser
+        coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
+
+        // Act
+        val result = authRepository.updateDisplayName("New Name")
+
+        // Assert
+        result.isSuccess shouldBe true
+        coVerify(exactly = 1) { mockLocalAuthManager.saveUser(mockUser) }
+    }
+
+    @Test
+    fun `updateDisplayName should return failure on error`() = runTest {
+        // Arrange
+        val exception = RuntimeException("Update failed")
+        coEvery { mockRemoteAuthManager.updateDisplayName(any()) } throws exception
+
+        // Act
+        val result = authRepository.updateDisplayName("Invalid Name")
+
+        // Assert
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
+        coVerify(exactly = 0) { mockLocalAuthManager.saveUser(any()) }
+    }
 
     @Test
     fun `deleteUser should return success and clear local storage`() = runTest {
@@ -191,9 +251,10 @@ class AuthRepositoryImplTest {
         val result = authRepository.deleteUser()
 
         // Assert
-        result shouldBe Resource.Success(Unit)
+        result.isSuccess shouldBe true
         coVerify(exactly = 1) { mockLocalAuthManager.clearUser() }
     }
+
 
     @Test
     fun `deleteUser should return failure on error`() = runTest {
@@ -205,7 +266,8 @@ class AuthRepositoryImplTest {
         val result = authRepository.deleteUser()
 
         // Assert
-        result shouldBe Resource.Failure(exception)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
         coVerify(exactly = 0) { mockLocalAuthManager.clearUser() }
     }
 
@@ -219,7 +281,7 @@ class AuthRepositoryImplTest {
         val result = authRepository.signOut()
 
         // Assert
-        result shouldBe Resource.Success(Unit)
+        result.isSuccess shouldBe true
         coVerify(exactly = 1) { mockLocalAuthManager.clearUser() }
     }
 
@@ -233,7 +295,8 @@ class AuthRepositoryImplTest {
         val result = authRepository.signOut()
 
         // Assert
-        result shouldBe Resource.Failure(exception)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBe exception
         coVerify(exactly = 0) { mockLocalAuthManager.clearUser() }
     }
 

@@ -39,8 +39,7 @@ class RemoteAuthManagerTest {
     @Test
     fun `getAuthState should map exception when there's an error in flow`() = runTest {
         val expectedException = RuntimeException("Mapped error")
-        every { mockFirebaseAuth.addAuthStateListener(any()) } throws
-                mockFirebaseAuthException()
+        every { mockFirebaseAuth.addAuthStateListener(any()) } throws mockFirebaseAuthException()
 
         every { mockExceptionMapper.map(any()) } returns expectedException
 
@@ -112,7 +111,7 @@ class RemoteAuthManagerTest {
             every { mockFirebaseAuth.currentUser } returns null
 
             shouldThrow<UserNotFoundException> {
-                authManager.linkToPermanentAccount("test@example.com", "pass", "Name")
+                authManager.linkToPermanentAccount("test@example.com", "pass")
             }
         }
 
@@ -148,6 +147,39 @@ class RemoteAuthManagerTest {
         }
     }
 
+    @Test
+    fun `registerWithEmailAndPassword should return user when registration succeeds`() = runTest {
+        val mockUser = mockFirebaseUser("user1", "test@example.com", false)
+        val mockTask = mockTask(result = mockAuthResult(mockUser), exception = null)
+        every { mockFirebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns mockTask
+
+        val result = authManager.registerWithEmailAndPassword("test@example.com", "password")
+
+        result shouldBe mockUser.toDomainUser()
+    }
+
+    @Test
+    fun `registerWithEmailAndPassword should throw UserNotFoundException when user is null`() =
+        runTest {
+            val mockTask = mockTask(result = mockAuthResult(null), exception = null)
+            every { mockFirebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns mockTask
+
+            // Act & Assert
+            shouldThrow<MockKException> {
+                authManager.registerWithEmailAndPassword("test@example.com", "password")
+            }
+        }
+
+    @Test
+    fun `updateDisplayName should throw UserNotFoundException when no current user`() = runTest {
+        // Arrange
+        every { mockFirebaseAuth.currentUser } returns null
+
+        // Act & Assert
+        shouldThrow<UserNotFoundException> {
+            authManager.updateDisplayName("New Name")
+        }
+    }
 }
 
 private fun FirebaseUser.toDomainUser(): User = User(

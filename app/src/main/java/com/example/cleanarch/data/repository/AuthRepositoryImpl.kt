@@ -50,57 +50,79 @@ class AuthRepositoryImpl(
     override suspend fun signInWithEmailAndPassword(
         email: String,
         password: String
-    ) = withContext(dispatcher) {
+    ): Result<Unit> = withContext(dispatcher) {
         try {
             val user = remoteManager.signInWithEmailAndPassword(email, password)
             localManager.saveUser(user)
-            Resource.Success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            Result.failure(e)
         }
     }
 
-    override suspend fun signInAnonymously(): Resource<Unit> = withContext(dispatcher) {
+    override suspend fun registerWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Result<Unit> {
+        return try {
+            val user = remoteManager.registerWithEmailAndPassword(email, password)
+            localManager.saveUser(user)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun signInAnonymously(): Result<Unit> = withContext(dispatcher) {
         try {
             val user = remoteManager.signInAnonymously()
             localManager.saveUser(user)
-            Resource.Success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            Result.failure(e)
         }
     }
 
     override suspend fun convertToPermanentAccount(
         email: String,
         password: String,
-        name: String
-    ): Resource<Unit> = withContext(dispatcher) {
+    ): Result<Unit> = withContext(dispatcher) {
         try {
-            val user = remoteManager.linkToPermanentAccount(email, password, name)
+            val user = remoteManager.linkToPermanentAccount(email, password)
             localManager.saveUser(user)
-            Resource.Success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            Result.failure(e)
         }
     }
 
-    override suspend fun deleteUser(): Resource<Unit> {
+    override suspend fun updateDisplayName(name: String): Result<Unit> {
+        return try {
+            val user = remoteManager.updateDisplayName(name)
+            localManager.saveUser(user)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteUser(): Result<Unit> {
         return try {
             remoteManager.deleteUser()
             localManager.clearUser()
-            Resource.Success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            Result.failure(e)
         }
     }
 
-    override suspend fun signOut(): Resource<Unit> = withContext(dispatcher) {
+    override suspend fun signOut(): Result<Unit> = withContext(dispatcher) {
         try {
             remoteManager.signOut()
             localManager.clearUser()
-            Resource.Success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            Result.failure(e)
         }
     }
 }
