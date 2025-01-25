@@ -87,7 +87,7 @@ fun MainApp() {
         ) { innerPadding ->
             MainNavigation(
                 navController = navController,
-                startDestination = AppDestination.Home,
+                startDestination = AppDestination.Auth,
                 modifier = Modifier
                     .padding(innerPadding)
             )

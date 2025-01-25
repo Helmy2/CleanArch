@@ -14,9 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-val shapes = Shapes(
-    extraSmall = RoundedCornerShape(2.dp),
-    small = RoundedCornerShape(4.dp),
+val Shapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(8.dp),
     medium = RoundedCornerShape(8.dp),
     large = RoundedCornerShape(16.dp),
     extraLarge = RoundedCornerShape(16.dp)
@@ -31,32 +31,32 @@ private fun PreviewShapes() {
         ) {
             Box(
                 modifier = Modifier
-                    .size(50.dp)
-                    .clip(shape = shapes.extraSmall)
+                    .size(100.dp)
+                    .clip(shape = Shapes.extraSmall)
                     .background(color = colorScheme.primary)
             )
             Box(
                 modifier = Modifier
                     .size(100.dp)
-                    .clip(shape = shapes.small)
+                    .clip(shape = Shapes.small)
                     .background(color = colorScheme.primary)
             )
             Box(
                 modifier = Modifier
-                    .size(200.dp)
-                    .clip(shape = shapes.medium)
+                    .size(100.dp)
+                    .clip(shape = Shapes.medium)
                     .background(color = colorScheme.primary)
             )
             Box(
                 modifier = Modifier
-                    .size(300.dp)
-                    .clip(shape = shapes.large)
+                    .size(100.dp)
+                    .clip(shape = Shapes.large)
                     .background(color = colorScheme.primary)
             )
             Box(
                 modifier = Modifier
-                    .size(400.dp)
-                    .clip(shape = shapes.extraLarge)
+                    .size(100.dp)
+                    .clip(shape = Shapes.extraLarge)
                     .background(color = colorScheme.primary)
             )
         }

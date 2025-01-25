@@ -42,7 +42,7 @@ fun CleanArchTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = shapes,
+        shapes = Shapes,
         content = content
     )
 }

@@ -10,6 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
 val dataModule = module {
+    includes(exceptionMapperModule)
+    includes(firebaseModule)
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), Dispatchers.IO) }
     single<LocalAuthManager> { LocalAuthManagerImpl(get()) }
     single<RemoteAuthManager> { RemoteAuthManagerImpl(get(), get()) }

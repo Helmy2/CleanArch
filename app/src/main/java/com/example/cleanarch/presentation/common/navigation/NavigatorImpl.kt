@@ -9,6 +9,9 @@ sealed class AppDestination {
     data object Home : AppDestination()
 
     @Serializable
+    data object Auth : AppDestination()
+
+    @Serializable
     data object Profile : AppDestination()
 
     @Serializable
@@ -16,10 +19,18 @@ sealed class AppDestination {
 }
 
 class NavigatorImpl(
-    val navControllerProvider: NavControllerProvider
+    private val navControllerProvider: NavControllerProvider
 ) : Navigator {
     override fun navigateToDetails(id: String) {
         navControllerProvider.navController?.navigate(AppDestination.Details(id = id))
+    }
+
+    override fun navigateToAuth() {
+        navControllerProvider.navController?.navigate(AppDestination.Auth)
+    }
+
+    override fun navigateToHome() {
+        navControllerProvider.navController?.navigate(AppDestination.Home)
     }
 
     override fun navigateBack() {

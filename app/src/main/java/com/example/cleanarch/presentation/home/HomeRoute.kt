@@ -50,7 +50,10 @@ private fun UserContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Welcome, ${user.name}!", style = typography.headlineMedium)
+        Text(text = "name, ${user.name}!", style = typography.headlineMedium)
+        Text(text = "email, ${user.email}!", style = typography.headlineMedium)
+        Text(text = "isAnonymous, ${user.isAnonymous}!", style = typography.headlineMedium)
+        Text(text = "id, ${user.id}!", style = typography.headlineMedium)
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = onDetailsClick) {
             Text("View Details")
