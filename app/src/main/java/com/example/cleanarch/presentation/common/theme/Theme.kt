@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.theme
+package com.example.cleanarch.presentation.common.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.main
+package com.example.cleanarch.presentation.common
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.main
+package com.example.cleanarch.presentation.common
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
@@ -24,7 +24,7 @@ import com.example.cleanarch.di.NavControllerProvider
 import com.example.cleanarch.di.SnackbarHostStateProvider
 import com.example.cleanarch.presentation.common.navigation.AppDestination
 import com.example.cleanarch.presentation.common.navigation.MainNavigation
-import com.example.cleanarch.presentation.theme.CleanArchTheme
+import com.example.cleanarch.presentation.common.theme.CleanArchTheme
 import org.koin.compose.getKoin
 
 
