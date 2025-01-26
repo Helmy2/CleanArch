@@ -2,8 +2,7 @@ package com.example.cleanarch.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.utils.Resource
-import com.example.cleanarch.domain.usecases.GetUserUseCase
+import com.example.domain.entity.Resource
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val navigator: Navigator,
     private val snackbarManager: SnackbarManager,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: com.example.domain.usecases.GetUserUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())

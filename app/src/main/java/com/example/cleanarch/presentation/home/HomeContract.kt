@@ -1,10 +1,10 @@
 package com.example.cleanarch.presentation.home
 
-import com.example.cleanarch.domain.entity.User
+import com.example.domain.entity.User
 
 
 data class HomeState(
-    val user: User? = null,
+    val user: com.example.domain.entity.User? = null,
     val isLoading: Boolean = true,
 )
 

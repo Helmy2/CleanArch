@@ -23,3 +23,4 @@ rootProject.name = "CleanArch"
 include(":app")
 include(":core")
 include(":data")
+include(":domain")

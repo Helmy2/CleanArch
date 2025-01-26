@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import com.example.cleanarch.domain.entity.User
+import com.example.domain.entity.User
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -25,18 +25,18 @@ class LocalAuthManagerTest {
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     private lateinit var testDataStore: DataStore<Preferences>
-    private lateinit var localUserManager: LocalAuthManager
+    private lateinit var localUserManager: com.example.data.local.LocalAuthManager
 
     @Before
     fun setUp() {
         testDataStore =
             PreferenceDataStoreFactory.create(produceFile = { tmpFolder.newFile("user.preferences_pb") })
-        localUserManager = LocalAuthManagerImpl(testDataStore)
+        localUserManager = com.example.data.local.LocalAuthManagerImpl(testDataStore)
     }
 
     @Test
     fun `saveUser should save user data to DataStore`() = runTest {
-        val user = User("123", "Test User", "test@example.com", false)
+        val user = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
 
         localUserManager.saveUser(user)
 
@@ -46,10 +46,11 @@ class LocalAuthManagerTest {
 
     @Test
     fun `saveUser should overwrite existing user data`() = runTest {
-        val initialUser = User("123", "Test User", "test@example.com", false)
+        val initialUser =
+            com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         localUserManager.saveUser(initialUser)
 
-        val newUser = User("123", "New User", "new@example.com", true)
+        val newUser = com.example.domain.entity.User("123", "New User", "new@example.com", true)
         localUserManager.saveUser(newUser)
 
         val savedUser = localUserManager.getCurrentUser().first()
@@ -58,7 +59,7 @@ class LocalAuthManagerTest {
 
     @Test
     fun `saveUser should handle user with empty fields`() = runTest {
-        val user = User("", "", "", false)
+        val user = com.example.domain.entity.User("", "", "", false)
 
         localUserManager.saveUser(user)
 
@@ -68,7 +69,7 @@ class LocalAuthManagerTest {
 
     @Test
     fun `saveUser should handle large user data`() = runTest {
-        val largeUser = User(
+        val largeUser = com.example.domain.entity.User(
             id = "123", name = "A".repeat(10000), // Large name
             email = "B".repeat(10000), // Large email
             isAnonymous = false
@@ -86,9 +87,9 @@ class LocalAuthManagerTest {
         val mockDataStore = mockk<DataStore<Preferences>> {
             coEvery { updateData(any()) } throws IOException("Write failed")
         }
-        val errorLocalUserManager = LocalAuthManagerImpl(mockDataStore)
+        val errorLocalUserManager = com.example.data.local.LocalAuthManagerImpl(mockDataStore)
 
-        val user = User("123", "Test User", "test@example.com", false)
+        val user = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
 
         shouldThrow<IOException> {
             errorLocalUserManager.saveUser(user)
@@ -109,7 +110,8 @@ class LocalAuthManagerTest {
         corruptedFile.writeText("invalid data")
 
         val corruptedDataStore = PreferenceDataStoreFactory.create(produceFile = { corruptedFile })
-        val corruptedLocalUserManager = LocalAuthManagerImpl(corruptedDataStore)
+        val corruptedLocalUserManager =
+            com.example.data.local.LocalAuthManagerImpl(corruptedDataStore)
 
         // Verify that the corrupted DataStore is handled gracefully
         shouldThrow<CorruptionException> {
@@ -119,8 +121,8 @@ class LocalAuthManagerTest {
 
     @Test
     fun `concurrent saveUser and getCurrentUser should not cause data corruption`() = runTest {
-        val user1 = User("123", "User 1", "user1@example.com", false)
-        val user2 = User("456", "User 2", "user2@example.com", true)
+        val user1 = com.example.domain.entity.User("123", "User 1", "user1@example.com", false)
+        val user2 = com.example.domain.entity.User("456", "User 2", "user2@example.com", true)
 
         // Perform concurrent operations
         val saveJob1 = launch { localUserManager.saveUser(user1) }
@@ -139,7 +141,7 @@ class LocalAuthManagerTest {
 
     @Test
     fun `clearUser should remove user data from DataStore`() = runTest {
-        val user = User("123", "Test User", "test@example.com", false)
+        val user = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         localUserManager.saveUser(user)
 
         localUserManager.clearUser()
@@ -158,7 +160,7 @@ class LocalAuthManagerTest {
 
     @Test
     fun `concurrent clearUser and saveUser should not cause data corruption`() = runTest {
-        val user = User("123", "Test User", "test@example.com", false)
+        val user = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
 
         // Perform concurrent operations
         val saveJob = launch { localUserManager.saveUser(user) }

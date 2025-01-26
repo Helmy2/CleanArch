@@ -4,9 +4,9 @@ import com.example.cleanarch.data.utils.mockAuthResult
 import com.example.cleanarch.data.utils.mockFirebaseAuthException
 import com.example.cleanarch.data.utils.mockFirebaseUser
 import com.example.cleanarch.data.utils.mockTask
-import com.example.cleanarch.domain.entity.User
+import com.example.domain.entity.User
 import com.example.cleanarch.domain.exceptions.AuthException.UserNotFoundException
-import com.example.cleanarch.domain.exceptions.ExceptionMapper
+import com.example.domain.exceptions.ExceptionMapper
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -23,15 +23,15 @@ import org.junit.Test
 
 class RemoteAuthManagerTest {
     private lateinit var mockFirebaseAuth: FirebaseAuth
-    private lateinit var authManager: RemoteAuthManager
-    private lateinit var mockExceptionMapper: ExceptionMapper
+    private lateinit var authManager: com.example.data.remote.RemoteAuthManager
+    private lateinit var mockExceptionMapper: com.example.domain.exceptions.ExceptionMapper
 
     @Before
     fun setup() {
         // Mock FirebaseAuth and related objects
         mockFirebaseAuth = mockk()
         mockExceptionMapper = mockk()
-        authManager = RemoteAuthManagerImpl(
+        authManager = com.example.data.remote.RemoteAuthManagerImpl(
             mockFirebaseAuth, mockExceptionMapper
         )
     }
@@ -182,6 +182,7 @@ class RemoteAuthManagerTest {
     }
 }
 
-private fun FirebaseUser.toDomainUser(): User = User(
-    id = uid, name = displayName ?: "Anonymous", email = email ?: "", isAnonymous = isAnonymous
-)
+private fun FirebaseUser.toDomainUser(): com.example.domain.entity.User =
+    com.example.domain.entity.User(
+        id = uid, name = displayName ?: "Anonymous", email = email ?: "", isAnonymous = isAnonymous
+    )

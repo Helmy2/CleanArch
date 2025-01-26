@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.cleanarch.domain.entity.User
+import com.example.domain.entity.User
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -40,7 +40,7 @@ fun HomeRoute(
 
 @Composable
 private fun UserContent(
-    user: User,
+    user: com.example.domain.entity.User,
     onDetailsClick: () -> Unit,
 ) {
     Column(

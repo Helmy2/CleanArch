@@ -1,9 +1,9 @@
 package com.example.cleanarch.di
 
-import com.example.cleanarch.domain.usecases.GetUserUseCase
-import com.example.cleanarch.domain.usecases.LoginUseCase
-import com.example.cleanarch.domain.usecases.RegisterUseCase
-import com.example.cleanarch.domain.usecases.SignInAnonymouslyUseCase
+import com.example.domain.usecases.GetUserUseCase
+import com.example.domain.usecases.LoginUseCase
+import com.example.domain.usecases.RegisterUseCase
+import com.example.domain.usecases.SignInAnonymouslyUseCase
 import com.example.cleanarch.presentation.auth.AuthViewModel
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.navigation.NavigatorImpl
@@ -25,14 +25,14 @@ val snackbarModule = module {
 }
 
 val userModule = module {
-    factory { GetUserUseCase(get()) }
+    factory { com.example.domain.usecases.GetUserUseCase(get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
 }
 
 val authModule = module {
-    factory { LoginUseCase(get()) }
-    factory { RegisterUseCase(get()) }
-    factory { SignInAnonymouslyUseCase(get()) }
+    factory { com.example.domain.usecases.LoginUseCase(get()) }
+    factory { com.example.domain.usecases.RegisterUseCase(get()) }
+    factory { com.example.domain.usecases.SignInAnonymouslyUseCase(get()) }
     viewModel { AuthViewModel(get(), get(), get(), get(), get()) }
 }
 

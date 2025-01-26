@@ -1,9 +1,6 @@
 package com.example.cleanarch.data.repository
 
-import com.example.cleanarch.data.local.LocalAuthManager
-import com.example.cleanarch.data.remote.RemoteAuthManager
-import com.example.core.utils.Resource
-import com.example.cleanarch.domain.entity.User
+import com.example.domain.entity.Resource
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,14 +14,14 @@ import org.junit.Before
 import org.junit.Test
 
 class AuthRepositoryImplTest {
-    private val mockRemoteAuthManager: RemoteAuthManager = mockk()
-    private val mockLocalAuthManager: LocalAuthManager = mockk()
-    private lateinit var authRepository: AuthRepositoryImpl
+    private val mockRemoteAuthManager: com.example.data.remote.RemoteAuthManager = mockk()
+    private val mockLocalAuthManager: com.example.data.local.LocalAuthManager = mockk()
+    private lateinit var authRepository: com.example.data.repository.AuthRepositoryImpl
 
 
     @Before
     fun setup() {
-        authRepository = AuthRepositoryImpl(
+        authRepository = com.example.data.repository.AuthRepositoryImpl(
             mockRemoteAuthManager,
             mockLocalAuthManager,
             Dispatchers.IO
@@ -34,7 +31,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `getCurrentUser should emit local user`() = runTest {
         // Arrange
-        val mockUser = User("123", "Test User", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         coEvery { mockLocalAuthManager.getCurrentUser() } returns flowOf(mockUser)
         coEvery { mockRemoteAuthManager.getAuthState() } returns flowOf(null)
 
@@ -49,7 +46,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `getCurrentUser should emit remote user and update local storage`() = runTest {
         // Arrange
-        val mockUser = User("123", "Test User", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         coEvery { mockLocalAuthManager.getCurrentUser() } returns flowOf(null)
         coEvery { mockRemoteAuthManager.getAuthState() } returns flowOf(mockUser)
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
@@ -83,7 +80,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `signInWithEmailAndPassword should return success and save user`() = runTest {
         // Arrange
-        val mockUser = User("123", "Test User", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         coEvery { mockRemoteAuthManager.signInWithEmailAndPassword(any(), any()) } returns mockUser
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
 
@@ -113,7 +110,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `registerWithEmailAndPassword should return success and save user`() = runTest {
         // Arrange
-        val mockUser = User("123", "Test User", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         coEvery {
             mockRemoteAuthManager.registerWithEmailAndPassword(
                 any(),
@@ -153,7 +150,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `signInAnonymously should return success and save user`() = runTest {
         // Arrange
-        val mockUser = User("123", "Anonymous", "", true)
+        val mockUser = com.example.domain.entity.User("123", "Anonymous", "", true)
         coEvery { mockRemoteAuthManager.signInAnonymously() } returns mockUser
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
 
@@ -183,7 +180,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `convertToPermanentAccount should return success and save user`() = runTest {
         // Arrange
-        val mockUser = User("123", "Test User", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "Test User", "test@example.com", false)
         coEvery { mockRemoteAuthManager.linkToPermanentAccount(any(), any()) } returns mockUser
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
 
@@ -214,7 +211,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `updateDisplayName should return success and save user`() = runTest {
         // Arrange
-        val mockUser = User("123", "New Name", "test@example.com", false)
+        val mockUser = com.example.domain.entity.User("123", "New Name", "test@example.com", false)
         coEvery { mockRemoteAuthManager.updateDisplayName(any()) } returns mockUser
         coEvery { mockLocalAuthManager.saveUser(mockUser) } returns Unit
 
