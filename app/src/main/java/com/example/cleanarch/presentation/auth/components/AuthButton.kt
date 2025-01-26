@@ -17,10 +17,15 @@ import com.example.cleanarch.presentation.common.theme.CleanArchTheme
 
 @Composable
 fun AuthButton(
-    isLoading: Boolean, isRegistering: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier
+    isLoading: Boolean,
+    isRegistering: Boolean,
+    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick, modifier = modifier.height(60.dp), enabled = !isLoading
+        onClick = if (isRegistering) onRegisterClick
+        else onLoginClick, modifier = modifier.height(60.dp), enabled = !isLoading
     ) {
         AnimatedContent(
             targetState = isLoading,
@@ -28,7 +33,6 @@ fun AuthButton(
             if (loading) {
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.onPrimary,
-                    strokeWidth = 4.dp,
                     modifier = Modifier.size(24.dp)
                 )
             } else {
@@ -46,11 +50,10 @@ fun AuthButton(
 fun AuthButtonLoginPreview() {
     CleanArchTheme {
         Surface {
-            AuthButton(
-                isLoading = false,
+            AuthButton(isLoading = false,
                 isRegistering = false,
-                onClick = {}
-            )
+                onRegisterClick = {},
+                onLoginClick = {})
         }
     }
 }
@@ -60,11 +63,10 @@ fun AuthButtonLoginPreview() {
 fun AuthButtonRegisterPreview() {
     CleanArchTheme {
         Surface {
-            AuthButton(
-                isLoading = false,
+            AuthButton(isLoading = false,
                 isRegistering = true,
-                onClick = {}
-            )
+                onRegisterClick = {},
+                onLoginClick = {})
         }
     }
 }
@@ -74,11 +76,10 @@ fun AuthButtonRegisterPreview() {
 fun AuthButtonLoadingPreview() {
     CleanArchTheme {
         Surface {
-            AuthButton(
-                isLoading = true,
+            AuthButton(isLoading = true,
                 isRegistering = true,
-                onClick = {}
-            )
+                onRegisterClick = {},
+                onLoginClick = {})
         }
     }
 }

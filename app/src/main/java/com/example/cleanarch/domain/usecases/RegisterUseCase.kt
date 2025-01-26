@@ -1,4 +1,4 @@
-package com.example.cleanarch.domain.usecas
+package com.example.cleanarch.domain.usecases
 
 import com.example.cleanarch.domain.repository.AuthRepository
 

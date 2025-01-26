@@ -3,7 +3,7 @@ package com.example.cleanarch.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cleanarch.domain.entity.Resource
-import com.example.cleanarch.domain.usecas.GetUserUseCase
+import com.example.cleanarch.domain.usecases.GetUserUseCase
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
 import kotlinx.coroutines.flow.MutableStateFlow

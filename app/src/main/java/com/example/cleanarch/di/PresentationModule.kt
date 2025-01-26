@@ -1,9 +1,9 @@
 package com.example.cleanarch.di
 
-import com.example.cleanarch.domain.usecas.GetUserUseCase
-import com.example.cleanarch.domain.usecas.LoginUseCase
-import com.example.cleanarch.domain.usecas.RegisterUseCase
-import com.example.cleanarch.domain.usecas.SignInAnonymouslyUseCase
+import com.example.cleanarch.domain.usecases.GetUserUseCase
+import com.example.cleanarch.domain.usecases.LoginUseCase
+import com.example.cleanarch.domain.usecases.RegisterUseCase
+import com.example.cleanarch.domain.usecases.SignInAnonymouslyUseCase
 import com.example.cleanarch.presentation.auth.AuthViewModel
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.navigation.NavigatorImpl

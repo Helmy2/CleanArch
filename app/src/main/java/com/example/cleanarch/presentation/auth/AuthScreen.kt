@@ -100,11 +100,17 @@ fun AuthScreen(
         Spacer(Modifier.height(16.dp))
 
         AuthButton(
-            isLoading = state.isLoading, isRegistering = state.isRegistering, onClick = {
+            isLoading = state.isLoading,
+            isRegistering = state.isRegistering,
+            onRegisterClick = {
                 keyboardController?.hide()
-                if (state.isRegistering) onEvent(AuthEvent.Register)
-                else onEvent(AuthEvent.Login)
-            }, modifier = Modifier.fillMaxWidth()
+                onEvent(AuthEvent.Register)
+            },
+            onLoginClick = {
+                keyboardController?.hide()
+                onEvent(AuthEvent.Login)
+            },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(Modifier.height(8.dp))
@@ -123,10 +129,7 @@ fun AuthScreen(
 fun AuthScreenPreview_Login() {
     CleanArchTheme {
         Surface {
-            AuthScreen(
-                state = AuthState(),
-                onEvent = {}
-            )
+            AuthScreen(state = AuthState(), onEvent = {})
         }
     }
 }
@@ -136,17 +139,13 @@ fun AuthScreenPreview_Login() {
 fun AuthScreenPreview_Register() {
     CleanArchTheme {
         Surface {
-            AuthScreen(
-                state = AuthState(
-                    isRegistering = true,
-                    passwordStrength = PasswordStrength.MEDIUM,
-                    passwordRequirements = listOf(
-                        Requirement("8+ characters", true),
-                        Requirement("1 uppercase letter", false)
-                    )
-                ),
-                onEvent = {}
-            )
+            AuthScreen(state = AuthState(
+                isRegistering = true,
+                passwordStrength = PasswordStrength.MEDIUM,
+                passwordRequirements = listOf(
+                    Requirement("8+ characters", true), Requirement("1 uppercase letter", false)
+                )
+            ), onEvent = {})
         }
     }
 }

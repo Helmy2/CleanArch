@@ -3,9 +3,9 @@ package com.example.cleanarch.presentation.auth
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cleanarch.domain.usecas.LoginUseCase
-import com.example.cleanarch.domain.usecas.RegisterUseCase
-import com.example.cleanarch.domain.usecas.SignInAnonymouslyUseCase
+import com.example.cleanarch.domain.usecases.LoginUseCase
+import com.example.cleanarch.domain.usecases.RegisterUseCase
+import com.example.cleanarch.domain.usecases.SignInAnonymouslyUseCase
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,8 +89,9 @@ class AuthViewModel(
         _state.update {
             it.copy(
                 isRegistering = !it.isRegistering,
-                name = if (it.isRegistering) "" else it.name,
-                nameError = null
+                nameError = null,
+                passwordError = null,
+                emailError = null
             )
         }
     }
