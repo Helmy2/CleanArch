@@ -20,7 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "CleanArch"
-include(":app")
-include(":core")
-include(":data")
-include(":domain")
+include(":app", ":core", ":data", ":domain", ":di", ":feature-auth", ":feature-home")
