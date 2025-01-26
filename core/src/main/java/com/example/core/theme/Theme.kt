@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.common.theme
+package com.example.core.theme
 
 import android.content.Context
 import android.os.Build

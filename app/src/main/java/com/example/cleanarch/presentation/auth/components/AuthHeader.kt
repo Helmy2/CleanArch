@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.cleanarch.R
-import com.example.cleanarch.presentation.common.theme.CleanArchTheme
+import com.example.core.theme.CleanArchTheme
 
 @Composable
 fun AuthHeader(isRegistering: Boolean) {

@@ -1,6 +1,6 @@
 package com.example.cleanarch.domain.repository
 
-import com.example.cleanarch.domain.entity.Resource
+import com.example.core.utils.Resource
 import com.example.cleanarch.domain.entity.User
 import kotlinx.coroutines.flow.Flow
 

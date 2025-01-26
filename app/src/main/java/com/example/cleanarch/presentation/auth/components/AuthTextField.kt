@@ -11,7 +11,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.example.cleanarch.presentation.common.theme.CleanArchTheme
+import com.example.core.theme.CleanArchTheme
 
 @Composable
 fun AuthTextField(

@@ -2,7 +2,7 @@ package com.example.cleanarch.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cleanarch.domain.entity.Resource
+import com.example.core.utils.Resource
 import com.example.cleanarch.domain.usecases.GetUserUseCase
 import com.example.cleanarch.presentation.common.navigation.Navigator
 import com.example.cleanarch.presentation.common.snackbar.SnackbarManager

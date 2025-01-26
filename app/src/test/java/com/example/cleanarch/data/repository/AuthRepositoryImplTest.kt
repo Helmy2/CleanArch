@@ -2,7 +2,7 @@ package com.example.cleanarch.data.repository
 
 import com.example.cleanarch.data.local.LocalAuthManager
 import com.example.cleanarch.data.remote.RemoteAuthManager
-import com.example.cleanarch.domain.entity.Resource
+import com.example.core.utils.Resource
 import com.example.cleanarch.domain.entity.User
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery

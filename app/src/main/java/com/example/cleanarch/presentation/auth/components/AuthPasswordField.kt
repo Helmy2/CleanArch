@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.cleanarch.presentation.auth.PasswordStrength
 import com.example.cleanarch.presentation.auth.Requirement
-import com.example.cleanarch.presentation.common.theme.CleanArchTheme
+import com.example.core.theme.CleanArchTheme
 
 
 @Composable

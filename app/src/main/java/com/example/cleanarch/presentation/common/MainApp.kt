@@ -23,8 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cleanarch.di.NavControllerProvider
 import com.example.cleanarch.di.SnackbarHostStateProvider
 import com.example.cleanarch.presentation.common.navigation.AppDestination
-import com.example.cleanarch.presentation.common.navigation.MainNavigation
-import com.example.cleanarch.presentation.common.theme.CleanArchTheme
+import com.example.core.theme.CleanArchTheme
 import org.koin.compose.getKoin
 
 

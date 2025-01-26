@@ -1,4 +1,4 @@
-package com.example.cleanarch.presentation.common.theme
+package com.example.core.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

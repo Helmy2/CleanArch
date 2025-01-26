@@ -3,7 +3,7 @@ package com.example.cleanarch.presentation.common.snackbar
 import com.example.cleanarch.di.SnackbarHostStateProvider
 
 class SnackbarManagerImpl(
-    val snackbarHostStateProvider: SnackbarHostStateProvider
+    private val snackbarHostStateProvider: SnackbarHostStateProvider
 ) : SnackbarManager {
     override suspend fun showSnackbar(throwable: Throwable) {
         dismissSnackbar()

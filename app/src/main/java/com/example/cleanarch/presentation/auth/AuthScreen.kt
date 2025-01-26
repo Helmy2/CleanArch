@@ -27,7 +27,7 @@ import com.example.cleanarch.presentation.auth.components.AuthButton
 import com.example.cleanarch.presentation.auth.components.AuthHeader
 import com.example.cleanarch.presentation.auth.components.AuthPasswordField
 import com.example.cleanarch.presentation.auth.components.AuthTextField
-import com.example.cleanarch.presentation.common.theme.CleanArchTheme
+import com.example.core.theme.CleanArchTheme
 
 
 @Composable

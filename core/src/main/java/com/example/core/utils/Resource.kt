@@ -1,4 +1,4 @@
-package com.example.cleanarch.domain.entity
+package com.example.core.utils
 
 
 sealed class Resource<out T> {
