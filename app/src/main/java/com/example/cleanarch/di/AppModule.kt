@@ -1,4 +1,4 @@
-package com.example.di
+package com.example.cleanarch.di
 
 import com.example.core.di.coreModule
 import com.example.data.di.dataModule

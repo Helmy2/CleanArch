@@ -44,15 +44,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons)
-    implementation(libs.androidx.appcompat)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // koin
-    implementation(platform(libs.koin.bom))
     implementation(libs.koin.compose)
-    implementation(libs.koin.navigation)
+
+    // navigation
+    implementation(libs.navigation.compose)
 
     // serialization
     implementation(libs.kotlin.serialization.json)

@@ -34,26 +34,16 @@ android {
 }
 
 dependencies {
-    api(project(":core"))
+    implementation(project(":core"))
     implementation(project(":domain"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     // koin
-    implementation(platform(libs.koin.bom))
     implementation(libs.koin.compose)
-    implementation(libs.koin.navigation)
 
     // serialization
     implementation(libs.kotlin.serialization.json)
 
     // firebase
-    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     // datastore

@@ -1,4 +1,4 @@
-package com.example.cleanarch
+package com.example.cleanarch.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding

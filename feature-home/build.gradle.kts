@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core"))
     implementation(project(":domain"))
 
@@ -51,9 +50,7 @@ dependencies {
     implementation(libs.androidx.material.icons)
 
     // Koin
-    implementation(platform(libs.koin.bom))
     implementation(libs.koin.compose)
-    implementation(libs.koin.navigation)
 
     // navigation
     implementation(libs.navigation.compose)

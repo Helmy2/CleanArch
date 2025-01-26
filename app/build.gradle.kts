@@ -42,8 +42,8 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":data"))
     implementation(project(":domain"))
-    implementation(project(":di"))
     implementation(project(":feature-auth"))
     implementation(project(":feature-home"))
 
@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.androidx.material.icons)
 
     // koin
-    implementation(platform(libs.koin.bom))
     implementation(libs.koin.compose)
     implementation(libs.koin.navigation)
 
@@ -67,13 +66,6 @@ dependencies {
 
     // serialization
     implementation(libs.kotlin.serialization.json)
-
-    // firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-
-    // datastore
-    implementation(libs.datastore.preferences)
 
     // test
     testImplementation(libs.junit)
