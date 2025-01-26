@@ -1,13 +1,13 @@
-package com.example.cleanarch.domain.exceptions
+package com.example.data.exception
 
-import com.example.cleanarch.domain.exceptions.AuthException.AccountConversionFailedException
-import com.example.cleanarch.domain.exceptions.AuthException.AnonymousSignInFailedException
-import com.example.cleanarch.domain.exceptions.AuthException.EmailAlreadyInUseException
-import com.example.cleanarch.domain.exceptions.AuthException.GenericAuthException
-import com.example.cleanarch.domain.exceptions.AuthException.InvalidCredentialsException
-import com.example.cleanarch.domain.exceptions.AuthException.NoInternetConnectionException
-import com.example.cleanarch.domain.exceptions.AuthException.UserNotFoundException
-import com.example.cleanarch.domain.exceptions.AuthException.WeakPasswordException
+import com.example.data.exception.AuthException.AccountConversionFailedException
+import com.example.data.exception.AuthException.AnonymousSignInFailedException
+import com.example.data.exception.AuthException.EmailAlreadyInUseException
+import com.example.data.exception.AuthException.GenericAuthException
+import com.example.data.exception.AuthException.InvalidCredentialsException
+import com.example.data.exception.AuthException.NoInternetConnectionException
+import com.example.data.exception.AuthException.UserNotFoundException
+import com.example.data.exception.AuthException.WeakPasswordException
 import com.example.domain.exceptions.ExceptionMapper
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -21,8 +21,8 @@ sealed class AuthException(message: String) : Exception(message) {
     class NoInternetConnectionException : AuthException("No internet connection")
     class GenericAuthException : AuthException("Authentication failed")
     class AnonymousSignInFailedException : AuthException("Anonymous sign-in failed")
-    class UserNotFoundException() : Exception("User not found")
-    class AccountConversionFailedException() : Exception("Account conversion failed")
+    class UserNotFoundException : Exception("User not found")
+    class AccountConversionFailedException : Exception("Account conversion failed")
 }
 
 class AuthExceptionMapper : ExceptionMapper {

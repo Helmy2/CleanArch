@@ -1,8 +1,8 @@
 package com.example.data.remote
 
-import com.example.cleanarch.domain.exceptions.AuthException.AccountConversionFailedException
-import com.example.cleanarch.domain.exceptions.AuthException.AnonymousSignInFailedException
-import com.example.cleanarch.domain.exceptions.AuthException.UserNotFoundException
+import com.example.data.exception.AuthException.AccountConversionFailedException
+import com.example.data.exception.AuthException.AnonymousSignInFailedException
+import com.example.data.exception.AuthException.UserNotFoundException
 import com.example.domain.entity.User
 import com.example.domain.exceptions.ExceptionMapper
 import com.google.firebase.auth.EmailAuthProvider

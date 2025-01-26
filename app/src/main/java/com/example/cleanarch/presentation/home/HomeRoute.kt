@@ -40,7 +40,7 @@ fun HomeRoute(
 
 @Composable
 private fun UserContent(
-    user: com.example.domain.entity.User,
+    user: User,
     onDetailsClick: () -> Unit,
 ) {
     Column(

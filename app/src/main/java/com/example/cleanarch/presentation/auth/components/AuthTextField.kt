@@ -58,7 +58,7 @@ fun AuthTextFieldPreview() {
     CleanArchTheme {
         Surface {
             AuthTextField(
-                value = "adsf",
+                value = "ads",
                 label = "Email",
                 error = "Invalid email format",
                 keyboardOptions = KeyboardOptions.Default,

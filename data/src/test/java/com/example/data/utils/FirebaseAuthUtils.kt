@@ -1,4 +1,4 @@
-package com.example.cleanarch.data.utils
+package com.example.data.utils
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

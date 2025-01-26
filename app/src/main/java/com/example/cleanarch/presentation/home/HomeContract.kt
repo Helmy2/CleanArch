@@ -4,7 +4,7 @@ import com.example.domain.entity.User
 
 
 data class HomeState(
-    val user: com.example.domain.entity.User? = null,
+    val user: User? = null,
     val isLoading: Boolean = true,
 )
 

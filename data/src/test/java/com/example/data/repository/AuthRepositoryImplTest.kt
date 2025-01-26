@@ -1,4 +1,4 @@
-package com.example.cleanarch.data.repository
+package com.example.data.repository
 
 import com.example.domain.entity.Resource
 import io.kotest.matchers.shouldBe
@@ -16,12 +16,12 @@ import org.junit.Test
 class AuthRepositoryImplTest {
     private val mockRemoteAuthManager: com.example.data.remote.RemoteAuthManager = mockk()
     private val mockLocalAuthManager: com.example.data.local.LocalAuthManager = mockk()
-    private lateinit var authRepository: com.example.data.repository.AuthRepositoryImpl
+    private lateinit var authRepository: AuthRepositoryImpl
 
 
     @Before
     fun setup() {
-        authRepository = com.example.data.repository.AuthRepositoryImpl(
+        authRepository = AuthRepositoryImpl(
             mockRemoteAuthManager,
             mockLocalAuthManager,
             Dispatchers.IO
@@ -99,7 +99,7 @@ class AuthRepositoryImplTest {
         coEvery { mockRemoteAuthManager.signInWithEmailAndPassword(any(), any()) } throws exception
 
         // Act
-        val result = authRepository.signInWithEmailAndPassword("invalid", "creds")
+        val result = authRepository.signInWithEmailAndPassword("invalid", "reds")
 
         // Assert
         result.isFailure shouldBe true
@@ -139,7 +139,7 @@ class AuthRepositoryImplTest {
         } throws exception
 
         // Act
-        val result = authRepository.registerWithEmailAndPassword("invalid", "creds")
+        val result = authRepository.registerWithEmailAndPassword("invalid", "reds")
 
         // Assert
         result.isFailure shouldBe true
@@ -200,7 +200,7 @@ class AuthRepositoryImplTest {
         coEvery { mockRemoteAuthManager.linkToPermanentAccount(any(), any()) } throws exception
 
         // Act
-        val result = authRepository.convertToPermanentAccount("invalid", "creds")
+        val result = authRepository.convertToPermanentAccount("invalid", "reds")
 
         // Assert
         result.isFailure shouldBe true

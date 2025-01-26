@@ -1,11 +1,10 @@
-package com.example.cleanarch.data.remote
+package com.example.data.remote
 
-import com.example.cleanarch.data.utils.mockAuthResult
-import com.example.cleanarch.data.utils.mockFirebaseAuthException
-import com.example.cleanarch.data.utils.mockFirebaseUser
-import com.example.cleanarch.data.utils.mockTask
-import com.example.domain.entity.User
-import com.example.cleanarch.domain.exceptions.AuthException.UserNotFoundException
+import com.example.data.exception.AuthException.UserNotFoundException
+import com.example.data.utils.mockAuthResult
+import com.example.data.utils.mockFirebaseAuthException
+import com.example.data.utils.mockFirebaseUser
+import com.example.data.utils.mockTask
 import com.example.domain.exceptions.ExceptionMapper
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -23,15 +22,15 @@ import org.junit.Test
 
 class RemoteAuthManagerTest {
     private lateinit var mockFirebaseAuth: FirebaseAuth
-    private lateinit var authManager: com.example.data.remote.RemoteAuthManager
-    private lateinit var mockExceptionMapper: com.example.domain.exceptions.ExceptionMapper
+    private lateinit var authManager: RemoteAuthManager
+    private lateinit var mockExceptionMapper: ExceptionMapper
 
     @Before
     fun setup() {
         // Mock FirebaseAuth and related objects
         mockFirebaseAuth = mockk()
         mockExceptionMapper = mockk()
-        authManager = com.example.data.remote.RemoteAuthManagerImpl(
+        authManager = RemoteAuthManagerImpl(
             mockFirebaseAuth, mockExceptionMapper
         )
     }

@@ -3,20 +3,20 @@ package com.example.cleanarch.presentation.auth
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cleanarch.presentation.common.navigation.Navigator
+import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
 import com.example.domain.usecases.LoginUseCase
 import com.example.domain.usecases.RegisterUseCase
 import com.example.domain.usecases.SignInAnonymouslyUseCase
-import com.example.cleanarch.presentation.common.navigation.Navigator
-import com.example.cleanarch.presentation.common.snackbar.SnackbarManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    private val loginUseCase: com.example.domain.usecases.LoginUseCase,
-    private val registerUseCase: com.example.domain.usecases.RegisterUseCase,
-    private val signInAnonymouslyUseCase: com.example.domain.usecases.SignInAnonymouslyUseCase,
+    private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
+    private val signInAnonymouslyUseCase: SignInAnonymouslyUseCase,
     private val snackbarManager: SnackbarManager,
     private val navigator: Navigator
 ) : ViewModel() {

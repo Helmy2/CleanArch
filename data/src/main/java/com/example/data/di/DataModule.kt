@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.cleanarch.domain.exceptions.AuthExceptionMapper
+import com.example.data.exception.AuthExceptionMapper
 import com.example.data.local.LocalAuthManager
 import com.example.data.local.LocalAuthManagerImpl
 import com.example.data.remote.RemoteAuthManager
