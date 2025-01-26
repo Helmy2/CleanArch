@@ -146,12 +146,12 @@ class AuthViewModel(
     // Enhanced validation
     private fun validateLoginInputs(): Boolean {
         val emailValid = isValidEmail(state.value.email)
-        val passwordValid = state.value.password.isNotBlank()
+        val passwordValid = state.value.password.length >= 8
 
         _state.update {
             it.copy(
                 emailError = if (emailValid) null else "Invalid email",
-                passwordError = if (passwordValid) null else "Password is required",
+                passwordError = if (passwordValid) null else "Invalid Password",
             )
         }
 
@@ -166,7 +166,11 @@ class AuthViewModel(
         _state.update {
             it.copy(
                 emailError = if (emailValid) null else "Invalid email",
-                passwordError = if (passwordValid) null else "Password is weak",
+                passwordError = when {
+                    passwordValid -> null
+                    state.value.password.isNotBlank() -> "The password i empty"
+                    else -> "The password should be medium or strong"
+                },
                 nameError = if (nameValid) null else "Name is required"
             )
         }
@@ -178,14 +182,13 @@ class AuthViewModel(
     }
 
     private fun calculatePasswordStrength(password: String): PasswordStrength {
-        val hasNumber = password.any { it.isDigit() }
         val hasSpecialChar = password.any { !it.isLetterOrDigit() }
         val hasUppercase = password.any { it.isUpperCase() }
         val length = password.length
 
         return when {
-            length >= 12 && hasNumber && hasSpecialChar && hasUppercase -> PasswordStrength.STRONG
-            length >= 8 && hasNumber && (hasSpecialChar || hasUppercase) -> PasswordStrength.MEDIUM
+            length >= 8 && hasSpecialChar && hasUppercase -> PasswordStrength.STRONG
+            length >= 8 && (hasSpecialChar || hasUppercase) -> PasswordStrength.MEDIUM
             else -> PasswordStrength.WEAK
         }
     }
@@ -193,7 +196,6 @@ class AuthViewModel(
     private fun calculatePasswordRequirements(password: String): List<Requirement> {
         return listOf(
             Requirement("At least 8 characters", password.length >= 8),
-            Requirement("Contains a number", password.any { it.isDigit() }),
             Requirement("Contains a special character", password.any { !it.isLetterOrDigit() }),
             Requirement("Contains an uppercase letter", password.any { it.isUpperCase() })
         )
