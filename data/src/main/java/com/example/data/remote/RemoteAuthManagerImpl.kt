@@ -101,6 +101,10 @@ class RemoteAuthManagerImpl(
         }
     }
 
+    override suspend fun resetPassword(email: String) {
+        firebaseAuth.sendPasswordResetEmail(email).await()
+    }
+
     private fun FirebaseUser.toDomainUser(): User = User(
         id = uid,
         name = displayName ?: "Anonymous",

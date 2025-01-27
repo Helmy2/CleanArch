@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.navigation.Navigator
 import com.example.core.snackbar.SnackbarManager
+import com.example.feature.auth.R
 import com.example.feature.auth.domain.usecase.LoginUseCase
 import com.example.feature.auth.domain.usecase.RegisterUseCase
+import com.example.feature.auth.domain.usecase.RestPasswordUseCase
 import com.example.feature.auth.domain.usecase.SignInAnonymouslyUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +19,7 @@ class AuthViewModel(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
     private val signInAnonymouslyUseCase: SignInAnonymouslyUseCase,
+    private val restPasswordUseCase: RestPasswordUseCase,
     private val snackbarManager: SnackbarManager,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -42,11 +45,17 @@ class AuthViewModel(
                 clearNameError()
             }
 
+            is AuthEvent.AuthModeChanged -> toggleAuthMode(event.authMode)
             AuthEvent.TogglePasswordVisibility -> togglePasswordVisibility()
-            AuthEvent.ToggleAuthMode -> toggleAuthMode()
-            AuthEvent.Login -> login()
-            AuthEvent.Register -> register()
             AuthEvent.SignInAnonymously -> signInAnonymously()
+            AuthEvent.AuthButtonClicked -> {
+                when (state.value.authMode) {
+                    AuthMode.ForgotPassword -> forgetPassword()
+                    AuthMode.Login -> login()
+                    AuthMode.Register -> register()
+                }
+
+            }
         }
     }
 
@@ -61,7 +70,9 @@ class AuthViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val result = loginUseCase(state.value.email, state.value.password)
-            handleAuthResult(result)
+            handleAuthResult(result) {
+                navigator.navigateToHome()
+            }
         }
     }
 
@@ -73,7 +84,25 @@ class AuthViewModel(
             val result = registerUseCase(
                 email = state.value.email, password = state.value.password, name = state.value.name
             )
-            handleAuthResult(result)
+            handleAuthResult(result) {
+                navigator.navigateToHome()
+            }
+        }
+    }
+
+    private fun forgetPassword() {
+        if (!isValidEmail(_state.value.email)) {
+            _state.update { it.copy(emailError = R.string.error_invalid_email) }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            val result = restPasswordUseCase(state.value.email)
+            handleAuthResult(result) {
+                _state.update { it.copy(authMode = AuthMode.Login) }
+                snackbarManager.showSnackbar("Check your email to reset your password")
+            }
         }
     }
 
@@ -81,30 +110,28 @@ class AuthViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val result = signInAnonymouslyUseCase()
-            handleAuthResult(result)
+            handleAuthResult(result) {
+                navigator.navigateToHome()
+            }
         }
     }
 
-    private fun toggleAuthMode() {
+    private fun toggleAuthMode(authMode: AuthMode) {
         _state.update {
             it.copy(
-                isRegistering = !it.isRegistering,
-                nameError = null,
-                passwordError = null,
-                emailError = null
+                authMode = authMode, nameError = null, passwordError = null, emailError = null
             )
         }
     }
 
-    private fun handleAuthResult(result: Result<Unit>) {
+    private suspend fun handleAuthResult(result: Result<Unit>, onSuccess: suspend () -> Unit) {
         _state.update { it.copy(isLoading = false) }
-        result.fold(onSuccess = {
-            navigator.navigateToHome()
-        }, onFailure = {
-            viewModelScope.launch {
-                snackbarManager.showSnackbar(it)
-            }
-        })
+        result.fold(
+            onSuccess = { onSuccess() },
+            onFailure = {
+                snackbarManager.showSnackbar(it.localizedMessage.orEmpty())
+            },
+        )
     }
 
     // Helper functions to update state
@@ -138,8 +165,7 @@ class AuthViewModel(
         val requirements = calculatePasswordRequirements(password)
         _state.update {
             it.copy(
-                passwordStrength = strength,
-                passwordRequirements = requirements
+                passwordStrength = strength, passwordRequirements = requirements
             )
         }
     }
@@ -151,8 +177,8 @@ class AuthViewModel(
 
         _state.update {
             it.copy(
-                emailError = if (emailValid) null else "Invalid email",
-                passwordError = if (passwordValid) null else "Invalid Password",
+                emailError = if (emailValid) null else R.string.error_invalid_email,
+                passwordError = if (passwordValid) null else R.string.error_invalid_password,
             )
         }
 
@@ -166,13 +192,11 @@ class AuthViewModel(
 
         _state.update {
             it.copy(
-                emailError = if (emailValid) null else "Invalid email",
-                passwordError = when {
+                emailError = if (emailValid) null else R.string.error_invalid_email, passwordError = when {
                     passwordValid -> null
-                    state.value.password.isNotBlank() -> "The password i empty"
-                    else -> "The password should be medium or strong"
-                },
-                nameError = if (nameValid) null else "Name is required"
+                    state.value.password.isBlank() -> R.string.error_password_empty
+                    else -> R.string.error_password_weak
+                }, nameError = if (nameValid) null else R.string.error_name_required
             )
         }
         return emailValid && passwordValid && nameValid
@@ -196,9 +220,9 @@ class AuthViewModel(
 
     private fun calculatePasswordRequirements(password: String): List<Requirement> {
         return listOf(
-            Requirement("At least 8 characters", password.length >= 8),
-            Requirement("Contains a special character", password.any { !it.isLetterOrDigit() }),
-            Requirement("Contains an uppercase letter", password.any { it.isUpperCase() })
+            Requirement(R.string.password_requirement_length, password.length >= 8),
+            Requirement(R.string.password_requirement_special, password.any { !it.isLetterOrDigit() }),
+            Requirement(R.string.password_requirement_uppercase, password.any { it.isUpperCase() })
         )
     }
 }

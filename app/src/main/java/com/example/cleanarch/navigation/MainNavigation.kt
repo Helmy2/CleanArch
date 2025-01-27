@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.core.navigation.AppDestination
+import com.example.feature.auth.AuthRoute
 import com.example.feature.home.presentation.HomeRoute
 
 @Composable
@@ -41,7 +42,7 @@ fun MainNavigation(
         }
 
         composable<AppDestination.Auth> {
-            com.example.feature.auth.presentation.AuthRoute()
+            AuthRoute()
         }
     }
 }

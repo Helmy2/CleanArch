@@ -1,5 +1,8 @@
 package com.example.feature.auth.presentation.components
 
+import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,20 +32,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.example.core.theme.CleanArchTheme
+import com.example.feature.auth.R
 import com.example.feature.auth.presentation.PasswordStrength
 import com.example.feature.auth.presentation.Requirement
-import com.example.core.theme.CleanArchTheme
 
 
 @Composable
 fun AuthPasswordField(
     value: String,
-    error: String?,
+    @StringRes error: Int?,
     isVisible: Boolean,
     isRegistering: Boolean,
     passwordStrength: PasswordStrength,
@@ -52,10 +57,9 @@ fun AuthPasswordField(
     onVisibilityToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedTextField(
-        value = value,
+    OutlinedTextField(value = value,
         onValueChange = onValueChange,
-        placeholder = { Text("Password") },
+        placeholder = { Text(stringResource(R.string.password)) },
         keyboardOptions = keyboardOptions,
         visualTransformation = if (isVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
@@ -71,30 +75,25 @@ fun AuthPasswordField(
                 isVisible = isVisible, onToggle = onVisibilityToggle
             )
         },
-        supportingText = when {
-            error != null -> {
-                {
+        supportingText = {
+            AnimatedContent(error != null) {
+                if (it) {
                     Text(
-                        text = error,
+                        text = if (error != null) stringResource(error) else "",
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.labelSmall
                     )
+                } else {
+                    AnimatedVisibility(isRegistering && passwordStrength != PasswordStrength.STRONG && value.isNotEmpty()) {
+                        PasswordStrengthIndicator(
+                            strength = passwordStrength,
+                            requirements = passwordRequirements,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
-
-            isRegistering && passwordStrength != PasswordStrength.STRONG && value.isNotEmpty() -> {
-                {
-                    PasswordStrengthIndicator(
-                        strength = passwordStrength,
-                        requirements = passwordRequirements,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
-
-            else -> null
-        },
-    )
+        })
 }
 
 @PreviewLightDark
@@ -102,19 +101,21 @@ fun AuthPasswordField(
 fun AuthPasswordFieldRequirementsPreview() {
     CleanArchTheme {
         Surface {
-            AuthPasswordField(value = "password123",
+            AuthPasswordField(
+                value = "password123",
                 error = null,
                 isVisible = true,
                 isRegistering = true,
-                passwordStrength = PasswordStrength.STRONG,
+                passwordStrength = PasswordStrength.WEAK,
                 passwordRequirements = listOf(
-                    Requirement("8+ characters", true),
-                    Requirement("1 number", true),
-                    Requirement("1 special char", false)
+                    Requirement(R.string.password_requirement_length, true),
+                    Requirement(R.string.password_requirement_uppercase, false),
+                    Requirement(R.string.password_requirement_special, false)
                 ),
                 keyboardOptions = KeyboardOptions.Default,
                 onValueChange = {},
-                onVisibilityToggle = {})
+                onVisibilityToggle = {},
+            )
         }
     }
 }
@@ -125,7 +126,7 @@ fun AuthPasswordFieldErrorPreview() {
     CleanArchTheme {
         Surface {
             AuthPasswordField(value = "password",
-                error = "The should be medium or strong",
+                error = R.string.error_invalid_password,
                 isVisible = true,
                 isRegistering = false,
                 passwordStrength = PasswordStrength.WEAK,
@@ -143,7 +144,7 @@ fun AuthPasswordFieldEmptyPreview() {
     CleanArchTheme {
         Surface {
             AuthPasswordField(value = "",
-                error = "",
+                error = null,
                 isVisible = true,
                 isRegistering = false,
                 passwordStrength = PasswordStrength.WEAK,
@@ -167,7 +168,9 @@ private fun PasswordVisibilityToggle(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = if (isVisible) "Hide password" else "Show password",
+            contentDescription = if (isVisible) stringResource(R.string.hide_password) else stringResource(
+                R.string.show_password
+            ),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -233,7 +236,7 @@ private fun PasswordRequirementsChecklist(requirements: List<Requirement>) {
 }
 
 @Composable
-private fun RequirementItem(text: String, isMet: Boolean) {
+private fun RequirementItem(@StringRes text: Int, isMet: Boolean) {
     val icon = if (isMet) Icons.Default.CheckCircle else Icons.Default.Info
     val color =
         if (isMet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
@@ -243,13 +246,16 @@ private fun RequirementItem(text: String, isMet: Boolean) {
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = if (isMet) "Requirement met" else "Requirement not met",
+            contentDescription = if (isMet) stringResource(R.string.requirement_met)
+            else stringResource(
+                R.string.requirement_not_met
+            ),
             tint = color,
             modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = text, style = MaterialTheme.typography.labelSmall, color = color
+            text = stringResource(text), style = MaterialTheme.typography.labelSmall, color = color
         )
     }
 }

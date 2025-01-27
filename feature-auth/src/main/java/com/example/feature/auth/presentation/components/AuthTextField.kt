@@ -1,5 +1,6 @@
 package com.example.feature.auth.presentation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,14 +11,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.core.theme.CleanArchTheme
+import com.example.feature.auth.R
 
 @Composable
 fun AuthTextField(
     value: String,
     label: String,
-    error: String?,
+    @StringRes error: Int?,
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -39,7 +42,7 @@ fun AuthTextField(
                 error != null -> {
                     {
                         Text(
-                            text = error,
+                            text = stringResource(error) ,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.labelSmall
                         )
@@ -60,7 +63,7 @@ fun AuthTextFieldPreview() {
             AuthTextField(
                 value = "ads",
                 label = "Email",
-                error = "Invalid email format",
+                error = R.string.error_invalid_email,
                 keyboardOptions = KeyboardOptions.Default,
                 onValueChange = {},
             )

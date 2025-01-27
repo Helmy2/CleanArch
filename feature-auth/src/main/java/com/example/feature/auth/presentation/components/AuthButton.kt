@@ -1,7 +1,6 @@
 package com.example.feature.auth.presentation.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -18,27 +17,23 @@ import com.example.core.theme.CleanArchTheme
 @Composable
 fun AuthButton(
     isLoading: Boolean,
-    isRegistering: Boolean,
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit,
+    text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = if (isRegistering) onRegisterClick
-        else onLoginClick, modifier = modifier.height(60.dp), enabled = !isLoading
+        onClick = onClick, modifier = modifier, enabled = !isLoading
     ) {
         AnimatedContent(
             targetState = isLoading,
         ) { loading ->
             if (loading) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(24.dp)
+                    color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp)
                 )
             } else {
                 Text(
-                    text = if (isRegistering) "Register" else "Login",
-                    modifier = Modifier.padding(4.dp)
+                    text = text, modifier = Modifier.padding(4.dp)
                 )
             }
         }
@@ -50,10 +45,11 @@ fun AuthButton(
 fun AuthButtonLoginPreview() {
     CleanArchTheme {
         Surface {
-            AuthButton(isLoading = false,
-                isRegistering = false,
-                onRegisterClick = {},
-                onLoginClick = {})
+            AuthButton(
+                isLoading = true,
+                text = "Login",
+                onClick = {},
+            )
         }
     }
 }
@@ -63,24 +59,13 @@ fun AuthButtonLoginPreview() {
 fun AuthButtonRegisterPreview() {
     CleanArchTheme {
         Surface {
-            AuthButton(isLoading = false,
-                isRegistering = true,
-                onRegisterClick = {},
-                onLoginClick = {})
+            AuthButton(
+                isLoading = false,
+                text = "Login",
+                onClick = {},
+            )
         }
     }
 }
 
-@PreviewLightDark
-@Composable
-fun AuthButtonLoadingPreview() {
-    CleanArchTheme {
-        Surface {
-            AuthButton(isLoading = true,
-                isRegistering = true,
-                onRegisterClick = {},
-                onLoginClick = {})
-        }
-    }
-}
 

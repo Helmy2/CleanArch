@@ -2,9 +2,9 @@ package com.example.feature.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.Resource
 import com.example.core.navigation.Navigator
 import com.example.core.snackbar.SnackbarManager
+import com.example.domain.entity.Resource
 import com.example.feature.home.usecase.GetUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +32,7 @@ class HomeViewModel(
         viewModelScope.launch {
             getUserUseCase().catch { error ->
                 _state.update { it.copy(isLoading = false) }
-                snackbarManager.showSnackbar(error)
+                snackbarManager.showSnackbar(error.localizedMessage.orEmpty())
             }.collect { result ->
                 when (result) {
                     Resource.Loading -> _state.update {
@@ -45,7 +45,7 @@ class HomeViewModel(
 
                     is Resource.Failure -> {
                         _state.update { it.copy(isLoading = false) }
-                        snackbarManager.showSnackbar(result.exception)
+                        snackbarManager.showSnackbar(result.exception.localizedMessage.orEmpty())
                     }
                 }
             }

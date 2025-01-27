@@ -9,10 +9,10 @@ class SnackbarHostStateProvider {
 class SnackbarManagerImpl(
     private val snackbarHostStateProvider: SnackbarHostStateProvider
 ) : SnackbarManager {
-    override suspend fun showSnackbar(throwable: Throwable) {
+    override suspend fun showSnackbar(value: String) {
         dismissSnackbar()
         snackbarHostStateProvider.snackbarHostState?.showSnackbar(
-            throwable.localizedMessage ?: "Unknown error"
+            value.ifEmpty { "Unknown error" }
         )
     }
 

@@ -12,4 +12,5 @@ interface RemoteAuthManager {
     suspend fun updateDisplayName(string: String): User
     suspend fun signOut()
     suspend fun deleteUser()
+    suspend fun resetPassword(email: String)
 }

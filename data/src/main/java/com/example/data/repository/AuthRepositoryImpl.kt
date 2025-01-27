@@ -106,6 +106,15 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun resetPassword(email: String): Result<Unit> {
+        return try {
+            remoteManager.resetPassword(email)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun deleteUser(): Result<Unit> {
         return try {
             remoteManager.deleteUser()

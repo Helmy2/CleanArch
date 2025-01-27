@@ -23,4 +23,6 @@ interface AuthRepository {
     suspend fun deleteUser(): Result<Unit>
 
     suspend fun updateDisplayName(name: String): Result<Unit>
+
+    suspend fun resetPassword(email: String): Result<Unit>
 }
