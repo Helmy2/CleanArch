@@ -71,7 +71,7 @@ fun AuthHeader(authMode: AuthMode, modifier: Modifier = Modifier) {
                 text = when (mode) {
                     AuthMode.Login -> stringResource(R.string.welcome_back)
                     AuthMode.Register -> stringResource(R.string.create_account)
-                    AuthMode.ForgotPassword -> stringResource(R.string.reset_password)
+                    AuthMode.ForgotPassword -> stringResource(R.string.rest_password)
                 },
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
