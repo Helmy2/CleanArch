@@ -9,14 +9,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.core.navigation.AppDestination
+import com.example.core.navigation.Destination
 import com.example.feature.auth.AuthRoute
 import com.example.feature.home.presentation.HomeRoute
 
 @Composable
 fun MainNavigation(
     navController: NavHostController,
-    startDestination: AppDestination,
+    startDestination: Destination,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -24,24 +24,24 @@ fun MainNavigation(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        composable<AppDestination.Home> {
+        composable<Destination.Home> {
             HomeRoute()
         }
 
-        composable<AppDestination.Details> {
-            val details = it.toRoute<AppDestination.Details>()
+        composable<Destination.Details> {
+            val details = it.toRoute<Destination.Details>()
             Box(Modifier.fillMaxSize()) {
                 Text("Details: ${details.id}")
             }
         }
 
-        composable<AppDestination.Profile> {
+        composable<Destination.Profile> {
             Box(Modifier.fillMaxSize()) {
                 Text("Profile")
             }
         }
 
-        composable<AppDestination.Auth> {
+        composable<Destination.Auth> {
             AuthRoute()
         }
     }

@@ -1,43 +1,37 @@
 package com.example.core.navigation
 
-import androidx.navigation.NavController
-import kotlinx.serialization.Serializable
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 
 
-class NavControllerProvider {
-    var navController: NavController? = null
-}
+class NavigatorImpl : Navigator {
+    override var navController: NavHostController? = null
 
-sealed class AppDestination {
-    @Serializable
-    data object Home : AppDestination()
-
-    @Serializable
-    data object Auth : AppDestination()
-
-    @Serializable
-    data object Profile : AppDestination()
-
-    @Serializable
-    data class Details(val id: String) : AppDestination()
-}
-
-class NavigatorImpl(
-    private val navControllerProvider: NavControllerProvider
-) : Navigator {
     override fun navigateToDetails(id: String) {
-        navControllerProvider.navController?.navigate(AppDestination.Details(id = id))
+        navController?.navigate(Destination.Details(id = id))
     }
 
     override fun navigateToAuth() {
-        navControllerProvider.navController?.navigate(AppDestination.Auth)
+        navController?.navigate(Destination.Auth)
     }
 
     override fun navigateToHome() {
-        navControllerProvider.navController?.navigate(AppDestination.Home)
+        navController?.navigate(Destination.Home)
     }
 
     override fun navigateBack() {
-        navControllerProvider.navController?.popBackStack()
+        navController?.popBackStack()
+    }
+
+    override fun navigateToTopLevelRute(route: Destination) {
+        navController?.apply {
+            navigate(route) {
+                popUpTo(graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     }
 }

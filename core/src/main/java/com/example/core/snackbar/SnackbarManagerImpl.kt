@@ -2,21 +2,18 @@ package com.example.core.snackbar
 
 import androidx.compose.material3.SnackbarHostState
 
-class SnackbarHostStateProvider {
-    var snackbarHostState: SnackbarHostState? = null
-}
 
-class SnackbarManagerImpl(
-    private val snackbarHostStateProvider: SnackbarHostStateProvider
-) : SnackbarManager {
+class SnackbarManagerImpl : SnackbarManager {
+    override var snackbarHostState: SnackbarHostState? = null
+
     override suspend fun showSnackbar(value: String) {
         dismissSnackbar()
-        snackbarHostStateProvider.snackbarHostState?.showSnackbar(
+        snackbarHostState?.showSnackbar(
             value.ifEmpty { "Unknown error" }
         )
     }
 
     override suspend fun dismissSnackbar() {
-        snackbarHostStateProvider.snackbarHostState?.currentSnackbarData?.dismiss()
+        snackbarHostState?.currentSnackbarData?.dismiss()
     }
 }
