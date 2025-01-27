@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.navigation.Navigator
 import com.example.core.snackbar.SnackbarManager
 import com.example.domain.entity.Resource
-import com.example.feature.home.usecase.GetUserUseCase
+import com.example.domain.usecase.GetUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.example.feature.home.usecase
+package com.example.domain.usecase
 
 import com.example.domain.entity.Resource
 import com.example.domain.entity.User

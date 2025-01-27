@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.navigation.Navigator
 import com.example.core.snackbar.SnackbarManager
 import com.example.feature.auth.R
-import com.example.feature.auth.domain.usecase.LoginUseCase
-import com.example.feature.auth.domain.usecase.RegisterUseCase
-import com.example.feature.auth.domain.usecase.RestPasswordUseCase
-import com.example.feature.auth.domain.usecase.SignInAnonymouslyUseCase
+import com.example.domain.usecase.LoginUseCase
+import com.example.domain.usecase.RegisterUseCase
+import com.example.domain.usecase.RestPasswordUseCase
+import com.example.domain.usecase.SignInAnonymouslyUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
